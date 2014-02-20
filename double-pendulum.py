@@ -182,9 +182,10 @@ class pendulum_system:
 	# @param window the window where the pendulum system should be shown
 	# @param Nx window width (in pixels)
 	# @param Ny window height (in pixels)
+	# @param dt the simulation time step
 	# @return always True
 	#
-	def draw(self, window, Nx, Ny):
+	def draw(self, window, Nx, Ny, dt):
 
 		m1 = self.m1;  m2 = self.m2
 		t1 = self.t1;  t2 = self.t2
@@ -218,6 +219,11 @@ class pendulum_system:
 		pygame.draw.circle(window, color_m1, X1, R1)
 		pygame.draw.circle(window, color_m2, X2, R2)
 
+		# write the time step value on the window
+		myfont = pygame.font.SysFont("Arial", 15)
+		label = myfont.render("dt = %.3g" % dt, 1, (128,128,128))
+		window.blit(label, (10, 10))
+
 		# update the screen
 		pygame.display.flip()
 
@@ -238,6 +244,9 @@ def print_usage():
 	output += "    -w, --omega=OMEGA1,OMEGA2     sets the initial angular velocity of each bob\n"
 	output += "    -L, --rodlen=LEN1,LEN2        sets the rod length for each bob\n"
 	output += "        --geometry=WIDTH,HEIGHT   sets the window dimensions\n\n"
+	output += "Keyboard shortcuts:\n"
+	output += "    Up Arrow      increases the time step\n"
+	output += "    Down Arrow    decreases the time step\n"
 	sys.stderr.write(output)
 	sys.exit(0)
 
@@ -347,7 +356,7 @@ def main():
 	pygame.display.set_caption("double pendulum")
 
 	# keep running the simulation until the user closes the window
-	while S.draw(window, Nx, Ny):
+	while S.draw(window, Nx, Ny, dt):
 
 		# limit the while loop to a max of 25 times per second.
 		clock.tick(25)
@@ -364,13 +373,20 @@ def main():
 
 		step += 1
 
-		# check window events: quit and resize
+		# check window events: quit, resize
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				return False
-			if event.type == pygame.VIDEORESIZE:
+			elif event.type == pygame.VIDEORESIZE:
 				(Nx,Ny) = event.size
 				window = pygame.display.set_mode((Nx, Ny), pygame.RESIZABLE)
+
+		# the up and down arrow keys decrease and increase dt respectively
+		pressed_keys = pygame.key.get_pressed()
+		if pressed_keys[273]:
+			dt *= 1.05
+		if pressed_keys[274]:
+			dt /= 1.05
 
 
 if __name__ == '__main__':
