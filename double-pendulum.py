@@ -351,6 +351,7 @@ def main():
 		# limit the while loop to a max of 25 times per second.
 		clock.tick(25)
 
+		# advance one time step
 		S.time_step(dt)
 
 		if verbose:
