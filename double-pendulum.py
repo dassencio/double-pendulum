@@ -177,28 +177,29 @@ class pendulum_system:
 		self.p1 += R[2]
 		self.p2 += R[3]
 
-	## draw the pendulum system on a window
-	def draw(self):
-
-		Nx = Ny = 250
+	##
+	# @brief draws the pendulum system on a window
+	# @param window the window where the pendulum system should be shown
+	# @param Nx window width (in pixels)
+	# @param Ny window height (in pixels)
+	# @return always True
+	#
+	def draw(self, window, Nx, Ny):
 
 		m1 = self.m1;  m2 = self.m2
 		t1 = self.t1;  t2 = self.t2
 		L1 = self.L1;  L2 = self.L2
 
-		# create a 2Nx × 2Ny window
-		window = pygame.display.set_mode((2*Nx, 2*Ny))
 		# radius (in pixels) of each bob (min/max: 3/12 pixels)
 		R1 = max(3, int( 12 * (m1 / (m1 + m2)) ))
 		R2 = max(3, int( 12 * (m2 / (m1 + m2)) ))
 
 		# length (in pixels) of each rod
-		P1 = 0.9 * min(Nx,Ny) * (L1 / (L1 + L2))
-		P2 = 0.9 * min(Nx,Ny) * (L2 / (L1 + L2))
-
+		P1 = 0.85 * min(Nx/2,Ny/2) * (L1 / (L1 + L2))
+		P2 = 0.85 * min(Nx/2,Ny/2) * (L2 / (L1 + L2))
 
 		# positions (in (pixels,pixels)) of each bob
-		X0 = array([Nx,Ny])
+		X0 = array([Nx/2,Ny/2])
 		X1 = X0 + array([int(P1*sin(t1)), int(P1*cos(t1))])
 		X2 = X1 + array([int(P2*sin(t2)), int(P2*cos(t2))])
 
@@ -208,6 +209,9 @@ class pendulum_system:
 		color_m1 = (255, 0  , 0  )
 		color_m2 = (0  , 0  , 255)
 
+		# clear the window
+		window.fill((0,0,0))
+
 		# draw the rods and the bobs
 		pygame.draw.line(window, color_L1, X0, X1, 3)
 		pygame.draw.line(window, color_L2, X1, X2, 3)
@@ -216,11 +220,6 @@ class pendulum_system:
 
 		# update the screen
 		pygame.display.flip()
-
-		# if the window is closed, exit
-		for event in pygame.event.get():
-			if event.type == pygame.QUIT:
-				return False
 
 		return True
 
@@ -260,13 +259,16 @@ def main():
 	w1 = w2 = 0.0
 	L1 = L2 = 1.0
 
+	# default window size parameters
+	Nx = Ny = 500
+
 	#
 	# process the input parameters
 	#
 	try:
 		opts, args = getopt.getopt(sys.argv[1:], "hvm:t:w:L:s:g:",
 			["help", "verbose", "mass=", "theta=", "omega=", "rodlen=",
-			"time-step=", "gravity="])
+			"time-step=", "gravity=", "geometry="])
 	except getopt.GetoptError as err:
 		print_error(str(err))
 
@@ -313,6 +315,13 @@ def main():
 				g = float(arg)
 			except:
 				print_error("invalid gravitational acceleration value")
+		elif opt in ("--geometry"):
+			try:
+				(Nx,Ny) = map(lambda x: int(x), tuple(arg.split(',')))
+				if Nx <= 0 or Ny <= 0:
+					raise ValueError
+			except:
+				print_error("invalid window dimensions (dimensions must be positive)")
 		else:
 			print_usage()
 
@@ -331,8 +340,13 @@ def main():
 
 	clock = pygame.time.Clock()
 
+	# create the output window
+	window = pygame.display.set_mode((Nx, Ny), pygame.RESIZABLE)
+
+	pygame.display.set_caption("double pendulum")
+
 	# keep running the simulation until the user closes the window
-	while S.draw():
+	while S.draw(window, Nx, Ny):
 
 		# limit the while loop to a max of 25 times per second.
 		clock.tick(25)
@@ -347,6 +361,14 @@ def main():
 			)
 
 		step += 1
+
+		# check window events: quit and resize
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				return False
+			if event.type == pygame.VIDEORESIZE:
+				(Nx,Ny) = event.size
+				window = pygame.display.set_mode((Nx, Ny), pygame.RESIZABLE)
 
 
 if __name__ == '__main__':
