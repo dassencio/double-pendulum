@@ -153,7 +153,7 @@ class pendulum_system:
 
 		return array([F_t1, F_t2, F_p1, F_p2])
 
-	## advance one time step using RK4 (classical Runge-Kutta method)
+	## advances one time step using RK4 (classical Runge-Kutta method)
 	def time_step(self, dt):
 
 		m1 = self.m1;  t1 = self.t1;  p1 = self.p1;  L1 = self.L1;
