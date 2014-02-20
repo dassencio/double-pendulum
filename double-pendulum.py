@@ -237,6 +237,7 @@ def print_usage():
 	output += "    -t, --theta=THETA1,THETA2    sets the initial angle of each bob\n"
 	output += "    -w, --omega=OMEGA1,OMEGA2    sets the initial angular velocity of each bob\n"
 	output += "    -L, --rodlen=LEN1,LEN2       sets the rod length for each bob\n"
+	output += "        --geometry=WIDTH,HEIGHT   sets the window dimensions\n\n"
 	sys.stderr.write(output)
 	sys.exit(0)
 
