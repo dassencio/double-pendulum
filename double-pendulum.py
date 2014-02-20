@@ -229,14 +229,14 @@ class pendulum_system:
 #
 def print_usage():
 	output  = "Usage: %s [OPTIONS]\n\n" % os.path.basename(__file__)
-	output += "    -h, --help                   prints these instructions\n"
-	output += "    -v, --verbose                activates verbose mode\n"
-	output += "    -g, --gravity=ACCEL          sets the gravitational acceleration\n"
-	output += "    -s, --time-step=STEP         sets the simulation time step\n"
-	output += "    -m, --mass=MASS1,MASS2       sets the mass of each bob\n"
-	output += "    -t, --theta=THETA1,THETA2    sets the initial angle of each bob\n"
-	output += "    -w, --omega=OMEGA1,OMEGA2    sets the initial angular velocity of each bob\n"
-	output += "    -L, --rodlen=LEN1,LEN2       sets the rod length for each bob\n"
+	output += "    -h, --help                    prints these instructions\n"
+	output += "    -v, --verbose                 activates verbose mode\n"
+	output += "    -g, --gravity=ACCEL           sets the gravitational acceleration\n"
+	output += "    -s, --time-step=STEP          sets the simulation time step\n"
+	output += "    -m, --mass=MASS1,MASS2        sets the mass of each bob\n"
+	output += "    -t, --theta=THETA1,THETA2     sets the initial angle of each bob\n"
+	output += "    -w, --omega=OMEGA1,OMEGA2     sets the initial angular velocity of each bob\n"
+	output += "    -L, --rodlen=LEN1,LEN2        sets the rod length for each bob\n"
 	output += "        --geometry=WIDTH,HEIGHT   sets the window dimensions\n\n"
 	sys.stderr.write(output)
 	sys.exit(0)
