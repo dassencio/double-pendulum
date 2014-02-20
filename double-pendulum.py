@@ -182,20 +182,20 @@ class pendulum_system:
 
 		Nx = Ny = 250
 
+		m1 = self.m1;  m2 = self.m2
 		t1 = self.t1;  t2 = self.t2
 		L1 = self.L1;  L2 = self.L2
 
 		# create a 2Nx × 2Ny window
 		window = pygame.display.set_mode((2*Nx, 2*Ny))
-
-		pygame.display.set_caption("double pendulum")
+		# radius (in pixels) of each bob (min/max: 3/12 pixels)
+		R1 = max(3, int( 12 * (m1 / (m1 + m2)) ))
+		R2 = max(3, int( 12 * (m2 / (m1 + m2)) ))
 
 		# length (in pixels) of each rod
 		P1 = 0.9 * min(Nx,Ny) * (L1 / (L1 + L2))
 		P2 = 0.9 * min(Nx,Ny) * (L2 / (L1 + L2))
 
-		# radius of each bob (in pixels)
-		R1 = R2 = 5
 
 		# positions (in (pixels,pixels)) of each bob
 		X0 = array([Nx,Ny])
