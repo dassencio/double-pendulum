@@ -247,6 +247,7 @@ def print_usage():
 	output += "Keyboard shortcuts:\n"
 	output += "    Up Arrow      increases the time step\n"
 	output += "    Down Arrow    decreases the time step\n"
+	output += "    v             toggles verbose mode\n"
 	sys.stderr.write(output)
 	sys.exit(0)
 
@@ -373,13 +374,16 @@ def main():
 
 		step += 1
 
-		# check window events: quit, resize
+		# check window events: quit, resize, key presses
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				return False
 			elif event.type == pygame.VIDEORESIZE:
 				(Nx,Ny) = event.size
 				window = pygame.display.set_mode((Nx, Ny), pygame.RESIZABLE)
+			elif event.type == pygame.KEYDOWN:
+				if event.unicode == u'v':
+					verbose = not verbose
 
 		# the up and down arrow keys decrease and increase dt respectively
 		pressed_keys = pygame.key.get_pressed()
