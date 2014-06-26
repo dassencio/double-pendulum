@@ -90,8 +90,8 @@ class pendulum_system:
 	## computes the kinetic energy of the system
 	def kinetic_energy(self):
 
-		m1 = self.m1;  t1 = self.t1;  p1 = self.p1;  L1 = self.L1;
-		m2 = self.m2;  t2 = self.t2;  p2 = self.p2;  L2 = self.L2;
+		m1 = self.m1;  t1 = self.t1;  L1 = self.L1;
+		m2 = self.m2;  t2 = self.t2;  L2 = self.L2;
 
 		# compute the angular velocity of each bob
 		(w1,w2) = self.omega()
