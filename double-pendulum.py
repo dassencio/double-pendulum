@@ -28,10 +28,13 @@ import sys
 import getopt
 import pygame
 import dp_draw
-import dp_hamiltonian
 
 from math  import *
 from numpy import *
+
+from dp_lagrangian  import *
+from dp_hamiltonian import *
+
 
 ##
 # @brief prints usage instructions to stderr and exits
@@ -40,6 +43,7 @@ def print_usage():
 	output  = "Usage: %s [OPTIONS]\n\n" % os.path.basename(__file__)
 	output += "    -h, --help                    prints these instructions\n"
 	output += "    -v, --verbose                 activates verbose mode\n"
+	output += "    -H, --hamiltonian             runs simulation using Hamilton's equations\n"
 	output += "    -g, --gravity=ACCEL           sets the gravitational acceleration\n"
 	output += "    -s, --time-step=STEP          sets the simulation time step\n"
 	output += "    -m, --mass=MASS1,MASS2        sets the mass of each bob\n"
@@ -53,7 +57,6 @@ def print_usage():
 	output += "    v             toggles verbose mode\n"
 	sys.stderr.write(output)
 	sys.exit(0)
-
 
 ##
 # @brief prints an error message and exits with an error code (1)
@@ -80,17 +83,22 @@ def main():
 	# process the input parameters
 	#
 	try:
-		opts, args = getopt.getopt(sys.argv[1:], "hvm:t:w:L:s:g:",
+		opts, args = getopt.getopt(sys.argv[1:], "hvHm:t:w:L:s:g:",
 			["help", "verbose", "mass=", "theta=", "omega=", "rodlen=",
-			"time-step=", "gravity=", "geometry="])
+			"time-step=", "gravity=", "geometry=", "hamiltonian"])
 	except getopt.GetoptError as err:
 		print_error(str(err))
 
 	verbose = False
 
+	# by default, use the Euler-Lagrange equations to simulate the system
+	lagrangian = True
+
 	for opt, arg in opts:
 		if opt == "-v":
 			verbose = True
+		elif opt in ("-H", "--hamiltonian"):
+			lagrangian = False
 		elif opt in ("-h", "--help"):
 			print_usage()
 		elif opt in ("-m", "--mass"):
@@ -140,7 +148,10 @@ def main():
 			print_usage()
 
 	# initialize the pendulum system
-	S = dp_hamiltonian.pendulum_system(g, m1, m2, t1, t2, w1, w2, L1, L2)
+	if lagrangian:
+		S = dp_lagrangian(g, m1, m2, t1, t2, w1, w2, L1, L2)
+	else:
+		S = dp_hamiltonian(g, m1, m2, t1, t2, w1, w2, L1, L2)
 
 	# E0 = initial mechanical energy of the system
 	E0 = S.mechanical_energy()

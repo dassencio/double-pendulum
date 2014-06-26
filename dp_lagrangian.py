@@ -27,7 +27,7 @@ from math  import *
 from numpy import *
 
 
-class dp_hamiltonian:
+class dp_lagrangian:
 
 	########################################################################
 	#
@@ -35,10 +35,10 @@ class dp_hamiltonian:
 	#
 	########################################################################
 
-	## masses, angles, canonical momenta and rod lengths
+	## masses, angles, angular velocities and rod lengths
 	m1 = 0.0;  m2 = 0.0
 	t1 = 0.0;  t2 = 0.0
-	p1 = 0.0;  p2 = 0.0
+	w1 = 0.0;  w2 = 0.0
 	L1 = 0.0;  L2 = 0.0
 
 	## gravitational acceleration
@@ -67,11 +67,8 @@ class dp_hamiltonian:
 		self.g  = g
 		self.m1 = m1;  self.m2 = m2
 		self.t1 = t1;  self.t2 = t2
+		self.w1 = w1;  self.w2 = w2
 		self.L1 = L1;  self.L2 = L2
-
-		# compute the initial canonical momenta
-		self.p1 = (m1+m2)*(L1**2)*w1 + m2*L1*L2*w2*cos(t1-t2)
-		self.p2 = m2*(L2**2)*w2 + m2*L1*L2*w1*cos(t1-t2)
 
 	## computes the potential energy of the system
 	def potential_energy(self):
@@ -90,11 +87,8 @@ class dp_hamiltonian:
 	## computes the kinetic energy of the system
 	def kinetic_energy(self):
 
-		m1 = self.m1;  t1 = self.t1;  L1 = self.L1;
-		m2 = self.m2;  t2 = self.t2;  L2 = self.L2;
-
-		# compute the angular velocity of each bob
-		(w1,w2) = self.omega()
+		m1 = self.m1;  t1 = self.t1;  w1 = self.w1;  L1 = self.L1;
+		m2 = self.m2;  t2 = self.t2;  w2 = self.w2;  L2 = self.L2;
 
 		# compute the kinetic energy of each bob
 		K1 = 0.5*m1*(L1*w1)**2
@@ -106,62 +100,48 @@ class dp_hamiltonian:
 	def mechanical_energy(self):
 		return self.kinetic_energy() + self.potential_energy()
 
-	## computes the angular velocities of the bobs and returns them as a tuple
-	def omega(self):
-
-		m1 = self.m1;  t1 = self.t1;  p1 = self.p1;  L1 = self.L1;
-		m2 = self.m2;  t2 = self.t2;  p2 = self.p2;  L2 = self.L2;
-
-		C0 = L1*L2*(m1 + m2*sin(t1-t2)**2)
-
-		w1 = (L2*p1 - L1*p2*cos(t1-t2)) / (L1*C0)
-		w2 = (L1*(m1+m2)*p2 - L2*m2*p1*cos(t1-t2)) / (L2*m2*C0)
-
-		return (w1,w2)
-
 	##
-	# @brief computes the right-hand side of the Hamilton's equations for
-	#        the pendulum system
+	# @brief computes the right-hand side of the Euler-Lagrange equations
+	#        for the pendulum system
 	# @param t1 angle of bob #1
 	# @param t2 angle of bob #2
-	# @param p1 canonical momentum of bob #1
-	# @param p2 canonical momentum of bob #2
-	# @return the right-hand side of the Hamilton's equations as an array
+	# @param w1 angular velocity of bob #1
+	# @param w2 angular velocity of bob #2
+	# @return the right-hand side of the Euler-Lagrange equations as an array
 	#
-	def hamilton_rhs(self, t1, t2, p1, p2):
+	def lagrange_rhs(self, t1, t2, w1, w2):
 
 		m1 = self.m1;  L1 = self.L1;
 		m2 = self.m2;  L2 = self.L2;
 
 		g = self.g
 
-		C0 = L1*L2*(m1 + m2*sin(t1-t2)**2)
-		C1 = (p1*p2*sin(t1-t2)) / C0
-		C2 = (m2*(L2*p1)**2 + (m1+m2)*(L1*p2)**2 - L1*L2*m2*p1*p2*cos(t1-t2)) * \
-		     sin(2*(t1-t2)) / (2*C0**2)
+		a1 = (L2/L1)*(m2/(m1+m2))*cos(t1-t2)
+		a2 = (L1/L2)*cos(t1-t2)
 
-		# F is the right-hand side of the Hamilton's equations
-		F_t1 = (L2*p1 - L1*p2*cos(t1-t2)) / (L1*C0)
-		F_t2 = (L1*(m1+m2)*p2 - L2*m2*p1*cos(t1-t2)) / (L2*m2*C0)
-		F_p1 = -(m1 + m2)*g*L1*sin(t1) - C1 + C2
-		F_p2 = -m2*g*L2*sin(t2) + C1 - C2
+		f1 = -(L2/L1)*(m2/(m1+m2))*(w2**2)*sin(t1-t2) - (g/L1)*sin(t1)
+		f2 = (L1/L2)*(w1**2)*sin(t1-t2) - (g/L2)*sin(t2)
 
-		return array([F_t1, F_t2, F_p1, F_p2])
+		g1 = (f1 - a1*f2) / (1 - a1*a2)
+		g2 = (f2 - a2*f1) / (1 - a1*a2)
+
+		return array([w1, w2, g1, g2])
 
 	## advances one time step using RK4 (classical Runge-Kutta method)
 	def time_step(self, dt):
 
-		m1 = self.m1;  t1 = self.t1;  p1 = self.p1;  L1 = self.L1;
-		m2 = self.m2;  t2 = self.t2;  p2 = self.p2;  L2 = self.L2;
+		m1 = self.m1;  t1 = self.t1;  w1 = self.w1;  L1 = self.L1;
+		m2 = self.m2;  t2 = self.t2;  w2 = self.w2;  L2 = self.L2;
 
-		# y is an array with the canonical variables (angles + momenta)
-		y = array([t1, t2, p1, p2])
+		# y is an array with the generalized variables (angles + angular
+		# velocities)
+		y = array([t1, t2, w1, w2])
 
 		# compute the RK4 constants
-		k1 = self.hamilton_rhs(*y)
-		k2 = self.hamilton_rhs(*(y + dt*k1/2))
-		k3 = self.hamilton_rhs(*(y + dt*k2/2))
-		k4 = self.hamilton_rhs(*(y + dt*k3))
+		k1 = self.lagrange_rhs(*y)
+		k2 = self.lagrange_rhs(*(y + dt*k1/2))
+		k3 = self.lagrange_rhs(*(y + dt*k2/2))
+		k4 = self.lagrange_rhs(*(y + dt*k3))
 
 		# compute the RK4 right-hand side
 		R = 1.0/6.0 * dt * (k1 + 2.0*k2 + 2.0*k3 + k4)
@@ -169,5 +149,5 @@ class dp_hamiltonian:
 		# update the angles and momenta
 		self.t1 += R[0]
 		self.t2 += R[1]
-		self.p1 += R[2]
-		self.p2 += R[3]
+		self.w1 += R[2]
+		self.w2 += R[3]
