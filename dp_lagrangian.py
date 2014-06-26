@@ -133,8 +133,8 @@ class dp_lagrangian:
 		m1 = self.m1;  t1 = self.t1;  w1 = self.w1;  L1 = self.L1;
 		m2 = self.m2;  t2 = self.t2;  w2 = self.w2;  L2 = self.L2;
 
-		# y is an array with the generalized variables (angles + angular
-		# velocities)
+		# y is an array with the generalized coordinates (angles +
+		# angular velocities)
 		y = array([t1, t2, w1, w2])
 
 		# compute the RK4 constants
@@ -146,7 +146,7 @@ class dp_lagrangian:
 		# compute the RK4 right-hand side
 		R = 1.0/6.0 * dt * (k1 + 2.0*k2 + 2.0*k3 + k4)
 
-		# update the angles and momenta
+		# update the angles and angular velocities
 		self.t1 += R[0]
 		self.t2 += R[1]
 		self.w1 += R[2]
