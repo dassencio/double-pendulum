@@ -106,7 +106,7 @@ class pendulum_system:
 	def mechanical_energy(self):
 		return self.kinetic_energy() + self.potential_energy()
 
-	## computes the angular velocity of each bob and returns them as a tuple
+	## computes the angular velocities of the bobs and returns them as a tuple
 	def omega(self):
 
 		m1 = self.m1;  t1 = self.t1;  p1 = self.p1;  L1 = self.L1;
