@@ -137,7 +137,7 @@ class dp_hamiltonian:
 
 		C0 = L1*L2*(m1 + m2*sin(t1-t2)**2)
 		C1 = (p1*p2*sin(t1-t2)) / C0
-		C2 = (m2*(L2*p1)**2 + (m1+m2)*(L1*p2)**2 - L1*L2*m2*p1*p2*cos(t1-t2)) * \
+		C2 = (m2*(L2*p1)**2 + (m1+m2)*(L1*p2)**2 - 2*L1*L2*m2*p1*p2*cos(t1-t2)) * \
 		     sin(2*(t1-t2)) / (2*C0**2)
 
 		# F is the right-hand side of the Hamilton's equations
