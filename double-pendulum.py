@@ -199,7 +199,7 @@ def main():
 				if event.unicode == u'v':
 					verbose = not verbose
 
-		# the up and down arrow keys decrease and increase dt respectively
+		# the up and down arrow keys increase and decrease dt respectively
 		pressed_keys = pygame.key.get_pressed()
 		if pressed_keys[273]:
 			dt *= 1.05
