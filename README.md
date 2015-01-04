@@ -13,7 +13,7 @@ All code from this project is licensed under the GPLv3. See 'LICENSE' for more.
 Instructions
 ============
 
-Just run './double-pendulum.py -h' to get a list of simulation parameters which can
+Just run './double-pendulum -h' to get a list of simulation parameters which can
 be set.
 
 
