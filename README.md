@@ -43,4 +43,4 @@ If your simulation becomes unstable, try doing one or more of the following:
 Contributors & Contact Information
 ==================================
 
-Diego Assencio / contact[at]assencio[dot]com
+Diego Assencio / diego@assencio.com
