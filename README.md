@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/dassencio/double-pendulum.svg?branch=master)](https://travis-ci.org/dassencio/double-pendulum)
+
 Description
 ===========
 
