@@ -13,8 +13,9 @@ for the double pendulum problem.
 License
 =======
 
-All code from this project is licensed under the GPLv3. See the `LICENSE` file
-for more information.
+All code from this project is licensed under the GPLv3. See the
+[`LICENSE`](https://github.com/dassencio/double-pendulum/tree/master/LICENSE)
+file for more information.
 
 
 Required modules
