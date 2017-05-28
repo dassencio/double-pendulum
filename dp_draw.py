@@ -1,23 +1,22 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+"""Drawing function for a double pendulum system."""
 
+import math
+import numpy
 import pygame
 
-from math  import *
-from numpy import *
-
-
-##
-# @brief draws the pendulum system on a window
-# @param S the pendulum system class
-# @param window the window where the pendulum system should be shown
-# @param Nx window width (in pixels)
-# @param Ny window height (in pixels)
-# @param dt the simulation time step
-# @return always True
-#
 def draw(S, window, Nx, Ny, dt):
+
+	"""Draws the double pendulum system on a window.
+
+	S - The double pendulum object.
+	window - The window where the double pendulum will be shown.
+	Nx - The window width (in pixels).
+	Ny - The window height (in pixels).
+	dt - The simulation time step.
+	"""
 
 	m1 = S.m1;  m2 = S.m2
 	t1 = S.t1;  t2 = S.t2
@@ -32,9 +31,9 @@ def draw(S, window, Nx, Ny, dt):
 	P2 = 0.85 * min(Nx/2,Ny/2) * (L2 / (L1 + L2))
 
 	# positions (in (pixels,pixels)) of each bob
-	X0 = array([Nx/2,Ny/2])
-	X1 = X0 + array([int(P1*sin(t1)), int(P1*cos(t1))])
-	X2 = X1 + array([int(P2*sin(t2)), int(P2*cos(t2))])
+	X0 = numpy.array([Nx/2,Ny/2])
+	X1 = X0 + numpy.array([int(P1*math.sin(t1)), int(P1*math.cos(t1))])
+	X2 = X1 + numpy.array([int(P2*math.sin(t2)), int(P2*math.cos(t2))])
 
 	# color: rods and bobs
 	color_L1 = (255, 255, 255)
@@ -58,5 +57,3 @@ def draw(S, window, Nx, Ny, dt):
 
 	# update the screen
 	pygame.display.flip()
-
-	return True
