@@ -10,7 +10,8 @@ import pygame
 
 def draw(S, window, Nx, Ny, dt):
 
-	"""Draws the double pendulum system on a window.
+	"""
+	Draws the double pendulum system on a window.
 
 	S - The double pendulum object.
 	window - The window where the double pendulum will be shown.

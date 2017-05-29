@@ -11,7 +11,8 @@ class DoublePendulumHamiltonian:
 
 	def __init__(self, g, m1, m2, t1, t2, w1, w2, L1, L2):
 
-		"""Constructs a double pendulum simulator based on its
+		"""
+		Constructs a double pendulum simulator based on its
 		Hamilton's equations. Bob #1 is the one attached to the fixed
 		pivot.
 
@@ -69,15 +70,19 @@ class DoublePendulumHamiltonian:
 
 	def mechanical_energy(self):
 
-		"""Computes the mechanical energy (total energy) of the
-		system."""
+		"""
+		Computes the mechanical energy (total energy) of the
+		system.
+		"""
 
 		return self.kinetic_energy() + self.potential_energy()
 
 	def omega(self):
 
-		"""Computes the angular velocities of the bobs and returns them
-		as a tuple."""
+		"""
+		Computes the angular velocities of the bobs and returns them
+		as a tuple.
+		"""
 
 		m1 = self.m1;  t1 = self.t1;  p1 = self.p1;  L1 = self.L1;
 		m2 = self.m2;  t2 = self.t2;  p2 = self.p2;  L2 = self.L2;
@@ -91,7 +96,8 @@ class DoublePendulumHamiltonian:
 
 	def hamilton_rhs(self, t1, t2, p1, p2):
 
-		"""Computes the right-hand side of the Hamilton's equations for
+		"""
+		Computes the right-hand side of the Hamilton's equations for
 		the double pendulum and returns it as an array.
 
 		t1 - The angle of bob #1.
@@ -121,8 +127,10 @@ class DoublePendulumHamiltonian:
 
 	def time_step(self, dt):
 
-		"""Advances one time step using RK4 (classical Runge-Kutta
-		method)."""
+		"""
+		Advances one time step using RK4 (classical Runge-Kutta
+		method).
+		"""
 
 		m1 = self.m1;  t1 = self.t1;  p1 = self.p1;  L1 = self.L1;
 		m2 = self.m2;  t2 = self.t2;  p2 = self.p2;  L2 = self.L2;
