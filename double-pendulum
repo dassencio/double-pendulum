@@ -7,6 +7,7 @@ import os
 import pygame
 import sys
 
+
 def print_usage():
 
 	"""Prints usage instructions to stderr and exits."""
@@ -29,12 +30,14 @@ def print_usage():
 	sys.stderr.write(output)
 	sys.exit(0)
 
+
 def print_error(errmsg):
 
 	"""Prints an error message and exits with an error code (1)."""
 
 	sys.stderr.write("Error: %s\n" % errmsg)
 	sys.exit(1)
+
 
 def main():
 

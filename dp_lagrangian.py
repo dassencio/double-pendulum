@@ -6,6 +6,7 @@
 import math
 import numpy
 
+
 class DoublePendulumLagrangian:
 
 	def __init__(self, g, m1, m2, t1, t2, w1, w2, L1, L2):

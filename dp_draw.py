@@ -7,6 +7,7 @@ import math
 import numpy
 import pygame
 
+
 def draw(S, window, Nx, Ny, dt):
 
 	"""Draws the double pendulum system on a window.
