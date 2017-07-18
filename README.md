@@ -3,7 +3,7 @@
 Description
 ===========
 
-A double pendulum simulator (written in Python) which uses the Runge-Kutta
+A double pendulum simulator (written in Python 3) which uses the Runge-Kutta
 (RK) method to solve the set of differential equations from either the
 [Lagrangian formulation](http://diego.assencio.com/?index=1500c66ae7ab27bb0106467c68feebc6)
 or from the [Hamiltonian formulation](https://diego.assencio.com/?index=e5ac36fcb129ce95a61f8e8ce0572dbf)
@@ -26,9 +26,9 @@ The following modules are used:
     - numpy
     - pygame
 
-On Ubuntu/Debian, you can install them with the following command:
+You can install them with the following command:
 
-	sudo apt-get install python-pygame python-numpy
+	pip3 install pygame numpy
 
 
 Usage instructions

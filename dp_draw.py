@@ -1,5 +1,4 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
 """Drawing function for a double pendulum system."""
 
@@ -35,7 +34,7 @@ def draw(S, window, Nx, Ny, dt):
     P2 = 0.85 * min(Nx / 2, Ny / 2) * (L2 / (L1 + L2))
 
     # positions (in (pixels,pixels)) of each bob
-    X0 = numpy.array([Nx / 2, Ny / 2])
+    X0 = numpy.array([int(Nx / 2), int(Ny / 2)])
     X1 = X0 + numpy.array([int(P1 * math.sin(t1)), int(P1 * math.cos(t1))])
     X2 = X1 + numpy.array([int(P2 * math.sin(t2)), int(P2 * math.cos(t2))])
 
@@ -51,8 +50,8 @@ def draw(S, window, Nx, Ny, dt):
     # draw the rods and the bobs
     pygame.draw.line(window, color_L1, X0, X1, 3)
     pygame.draw.line(window, color_L2, X1, X2, 3)
-    pygame.draw.circle(window, color_m1, X1, R1)
-    pygame.draw.circle(window, color_m2, X2, R2)
+    pygame.draw.circle(window, color_m1, X1, int(R1))
+    pygame.draw.circle(window, color_m2, X2, int(R2))
 
     # write the time step value on the window
     myfont = pygame.font.SysFont("Arial", 15)
