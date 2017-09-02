@@ -23,8 +23,8 @@ Required modules
 
 The following modules are used:
 
-    - numpy
-    - pygame
+* `numpy`
+* `pygame`
 
 You can install them with the following command:
 
