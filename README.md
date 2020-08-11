@@ -8,6 +8,10 @@ A double pendulum simulator (written in Python 3) which uses the Runge-Kutta
 or from the [Hamiltonian formulation](https://diego.assencio.com/?index=e5ac36fcb129ce95a61f8e8ce0572dbf)
 for the double pendulum problem.
 
+<p align="center">
+  <img src="https://diego.assencio.com/images/physics/double-pendulum.gif" />
+</p>
+
 # License
 
 All code from this project is licensed under the GPLv3. See the
