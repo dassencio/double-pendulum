@@ -64,7 +64,8 @@ def main():
         opts, args = getopt.getopt(sys.argv[1:], "hvHm:t:w:L:s:g:",
                                    ["help", "verbose", "mass=", "theta=",
                                     "omega=", "rodlen=", "time-step=",
-                                    "gravity=", "geometry=", "hamiltonian"])
+                                    "gravity=", "geometry=", "hamiltonian",
+                                    "test-mode"])
     except getopt.GetoptError as err:
         print_error(str(err))
 
@@ -72,6 +73,9 @@ def main():
 
     # by default, use the Euler-Lagrange equations to simulate the system
     lagrangian = True
+
+    # in test mode, no window is displayed (only text output is produced)
+    test_mode = False
 
     for opt, arg in opts:
         if opt == "-v":
@@ -126,6 +130,8 @@ def main():
             except:
                 print_error(
                     "invalid window dimensions (dimensions must be positive)")
+        elif opt in ("--test-mode"):
+            test_mode = True
         else:
             print_usage()
 
@@ -145,54 +151,59 @@ def main():
     # maximum energy change (compared to E0): too large => unstable simulation
     max_dE = 0
 
-    pygame.init()
-
-    clock = pygame.time.Clock()
-
-    # create the output window
-    window = pygame.display.set_mode((Nx, Ny), pygame.RESIZABLE)
-
-    pygame.display.set_caption("double pendulum")
+    # set up the clock and the output window
+    if test_mode == False:
+        pygame.init()
+        clock = pygame.time.Clock()
+        window = pygame.display.set_mode((Nx, Ny), pygame.RESIZABLE)
+        pygame.display.set_caption("double pendulum")
 
     # keep running the simulation until the user closes the window
     while True:
 
-        dp_draw.draw(S, window, Nx, Ny, dt)
+        # redraw the double pendulum at a maximum rate of 25 fps
+        if test_mode == False:
+            dp_draw.draw(S, window, Nx, Ny, dt)
+            clock.tick(25)
 
-        # limit the while loop to a max of 25 times per second.
-        clock.tick(25)
+        if test_mode == False:
+            if verbose:
+                Et = S.mechanical_energy()
+                max_dE = max(abs(Et - E0), max_dE)
+                line = "[%u] t = %f   Et = %f   E0 = %f   |Et - E0| = %f   " + \
+                    "|Et - E0|_max = %f\n"
+                sys.stdout.write(line % (
+                    step, step * dt, Et, E0, abs(Et - E0), max_dE
+                ))
+
+            # check window events: quit, resize, key presses
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    return False
+                elif event.type == pygame.VIDEORESIZE:
+                    (Nx, Ny) = event.size
+                    window = pygame.display.set_mode((Nx, Ny), pygame.RESIZABLE)
+                elif event.type == pygame.KEYDOWN:
+                    if event.unicode == u"v":
+                        verbose = not verbose
+
+            # the up and down arrow keys increase and decrease dt respectively
+            pressed_keys = pygame.key.get_pressed()
+            if pressed_keys[273]:
+                dt *= 1.05
+            if pressed_keys[274]:
+                dt /= 1.05
+        else:
+            line = "%f,%f,%f,%f\n"
+            sys.stdout.write(line % (
+                step * dt, S.t1, S.t2, S.mechanical_energy()
+            ))
+            if step == 100:
+                break
 
         # advance one time step
         S.time_step(dt)
-
-        if verbose:
-            Et = S.mechanical_energy()
-            max_dE = max(abs(Et - E0), max_dE)
-            line = "[%u] t = %f   Et = %f   E0 = %f   |Et - E0| = %f   " + \
-                   "|Et - E0|_max = %f\n"
-            sys.stdout.write(line % (
-                step, step * dt, Et, E0, abs(Et - E0), max_dE
-            ))
-
         step += 1
-
-        # check window events: quit, resize, key presses
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return False
-            elif event.type == pygame.VIDEORESIZE:
-                (Nx, Ny) = event.size
-                window = pygame.display.set_mode((Nx, Ny), pygame.RESIZABLE)
-            elif event.type == pygame.KEYDOWN:
-                if event.unicode == u"v":
-                    verbose = not verbose
-
-        # the up and down arrow keys increase and decrease dt respectively
-        pressed_keys = pygame.key.get_pressed()
-        if pressed_keys[273]:
-            dt *= 1.05
-        if pressed_keys[274]:
-            dt /= 1.05
 
 
 if __name__ == "__main__":
