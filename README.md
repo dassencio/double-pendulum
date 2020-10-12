@@ -1,4 +1,4 @@
-[![Build Status](https://api.travis-ci.com/dassencio/double-pendulum.svg?branch=master)](https://travis-ci.com/dassencio/double-pendulum)
+![Functional tests](https://github.com/dassencio/double-pendulum/workflows/Functional%20tests/badge.svg)
 
 # Description
 

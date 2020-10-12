@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# Enter the directory where this script is located.
+cd "$(dirname "${BASH_SOURCE[0]}")"
+
+run_test() {
+    local test_description=$1
+    local test_parameters=$2
+    local test_output_file=$3
+    diff <(PYGAME_HIDE_SUPPORT_PROMPT=hide ./double-pendulum --test-mode $test_parameters) \
+         "$test_output_file"
+    if [ $? -ne 0 ]
+    then
+        echo "[FAILED] $test_description"
+        exit 1
+    fi
+    echo "[PASSED] $test_description"
+}
+
+for test_param_file in $(ls tests/*.param)
+do
+    test_id=${test_param_file/.param/}
+    test_parameters=$(cat ${test_param_file})
+    test_output_file=${test_param_file/.param/.out}
+    run_test "$test_id (Lagrangian)" "$test_parameters" "$test_output_file"
+    run_test "$test_id (Hamiltonian)" "$test_parameters -H" "$test_output_file"
+done

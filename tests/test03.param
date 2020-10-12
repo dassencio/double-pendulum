@@ -1,0 +1,1 @@
+--time-step=0.015 --gravity=7 --mass=1,0.5 --theta=-0.2,-0.4 --omega=-0.2,-2 --rodlen=2,1
