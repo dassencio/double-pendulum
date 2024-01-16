@@ -10,7 +10,7 @@ or from the [Hamiltonian formulation](https://diego.assencio.com/?index=e5ac36fc
 for the double pendulum problem.
 
 <p align="center">
-  <img src="https://diego.assencio.com/images/physics/double-pendulum.gif" />
+  <img src="https://github.com/dassencio/double-pendulum/blob/master/.github/double-pendulum.gif?raw=true" />
 </p>
 
 # License
